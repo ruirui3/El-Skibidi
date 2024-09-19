@@ -6,53 +6,52 @@ public class Percolation {
     private boolean[][] opened;
     private int numOfOpenSites;
     private int size;
-    private int bottomConnector;
-    private int topConnector;
+    private final int bottomConnector;
+    private static final int topConnector = 0;
     
 
     public Percolation(int n) {
 
-        if (n <= 0) throw new IllegalArgumentException();
+        if (n <= 0) {
+            throw new IllegalArgumentException();
+        } 
         size = n;
         perc = new WeightedQuickUnionUF(n * n + 2);
         numOfOpenSites = 0; 
         opened = new boolean[size][size]; // all false
         bottomConnector = size*size+1;
-        topConnector = 0;
+        
+    }
 
+    public void validation(int row, int col) {
+        if (row <=0 || col <= 0 || row > size || col > size) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public void open(int row, int col) {
 
-        if (row < 1 || col < 1 || row > size || col > size) {
-            throw new IllegalArgumentException();
-        }
+        validation(row, col);
 
         opened[row-1][col-1] = true;
-        numOfOpenSites++;
+        ++numOfOpenSites;
 
         if (row == 1) {
             perc.union(getNodeNum(row, col), topConnector);
-            if (percolates()) {
-                return;
-            }
         }
         if (row == size) {
             perc.union(getNodeNum(row, col), bottomConnector);
-            if (percolates()) {
-                return;
-            }
         }
         if (isOpen(row-1, col) && row>1) {
             perc.union(getNodeNum(row, col), getNodeNum(row-1, col));
         }
-        if (isOpen(row+1, col) && row>1) {
+        if (isOpen(row+1, col) && row < size) {
             perc.union(getNodeNum(row, col), getNodeNum(row+1, col));
         }
-        if (isOpen(row, col-1) && row>1) {
+        if (isOpen(row, col-1) && col>1) {
             perc.union(getNodeNum(row, col), getNodeNum(row, col-1));
         }
-        if (isOpen(row, col+1) && row>1) {
+        if (isOpen(row, col+1) && col<size) {
             perc.union(getNodeNum(row, col), getNodeNum(row, col+1));
         }
 
@@ -64,9 +63,7 @@ public class Percolation {
 
     public boolean isOpen(int row, int col) {
 
-        if (row == 0 || col == 0 || row > size || col == size) {
-            throw new IllegalArgumentException();
-        }
+        validation(row, col);
 
         return opened[row-1][col-1];
 
@@ -74,11 +71,9 @@ public class Percolation {
 
     public boolean isFull(int row, int col) {
 
-        if (row == 0 || col == 0 || row > size || col == size) {
-            throw new IllegalArgumentException();
-        }
+        validation(row, col);
 
-        if (perc.find(getNodeNum(row, col)) == topConnector) {
+        if (perc.find(getNodeNum(row, col)) == perc.find(topConnector)) {
             return true;
         }
         return false;

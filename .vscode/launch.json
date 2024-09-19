@@ -6,6 +6,21 @@
     "configurations": [
         {
             "type": "java",
+            "name": "InteractivePercolationVisualizer",
+            "request": "launch",
+            "mainClass": "InteractivePercolationVisualizer",
+            "projectName": "El-Skibidi_542d7606"
+        },
+        {
+            "type": "java",
+            "name": "PercolationVisualizer",
+            "request": "launch",
+            "mainClass": "PercolationVisualizer",
+            "projectName": "El-Skibidi_542d7606",
+            "args": "eagle25.txt"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -22,10 +37,7 @@
             "name": "PercolationStats",
             "request": "launch",
             "mainClass": "PercolationStats",
-            "projectName": "El-Skibidi_542d7606",
-            "args": [
-                "eagle25.txt"
-            ]
+            "projectName": "El-Skibidi_542d7606"
         }
     ]
 }
