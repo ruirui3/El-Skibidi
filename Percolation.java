@@ -23,7 +23,7 @@ public class Percolation {
         
     }
 
-    public void validation(int row, int col) {
+    private void validation(int row, int col) {
         if (row <=0 || col <= 0 || row > size || col > size) {
             throw new IllegalArgumentException();
         }
