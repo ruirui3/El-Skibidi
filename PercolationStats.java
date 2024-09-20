@@ -6,9 +6,7 @@ public class PercolationStats {
 
     //initialize int n and int trials as private;
     private static final double CONST = 1.96;
-    private int n;
     private int trials;
-    private Percolation perc;
     private double[] sumOfAverage;
     
 
@@ -21,19 +19,18 @@ public class PercolationStats {
             throw new IllegalArgumentException();
         }
 
-        this.n = n;
         this.trials = trials;
         sumOfAverage = new double[this.trials];
         
         for (int i = 0; i<this.trials; i++) {
 
-            perc = new Percolation(n);
+            Percolation perc = new Percolation(n);
             int openSites = 0;
             while (!perc.percolates()) {
             
                 
-                int randomOne = StdRandom.uniformInt(n) + 1;
-                int randomTwo = StdRandom.uniformInt(n) + 1;
+                int randomOne = StdRandom.uniformInt(1, n+1);
+                int randomTwo = StdRandom.uniformInt(1, n+1);
     
                 if (!perc.isOpen(randomOne, randomTwo)) {
                     perc.open(randomOne, randomTwo);
@@ -80,14 +77,7 @@ public class PercolationStats {
 
    // test client (see below)
    public static void main(String[] args) {
-    int n = Integer.parseInt(args[0]);
-        int trials = Integer.parseInt(args[1]);
-        PercolationStats stats = new PercolationStats(n, trials);
-
-        StdOut.println("mean                    = " + stats.mean());
-        StdOut.println("stddev                  = " + stats.stddev());
-        StdOut.println("95% confidence interval = [" + stats.confidenceLo() + ", "
-                + stats.confidenceHi() + "]");
+        
    }
 
 }

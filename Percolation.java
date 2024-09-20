@@ -2,10 +2,10 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
     
-    private WeightedQuickUnionUF perc;
-    private boolean[][] opened;
+    private final WeightedQuickUnionUF perc;
+    private final boolean[][] opened;
     private int numOfOpenSites;
-    private int size;
+    private final int size;
     private final int bottomConnector;
     private static final int topConnector = 0;
     
@@ -71,12 +71,11 @@ public class Percolation {
 
     public boolean isFull(int row, int col) {
 
-        validation(row, col);
-
-        if (perc.find(getNodeNum(row, col)) == perc.find(topConnector)) {
-            return true;
+        if ((row > 0 && row <= size) && (col > 0 && col <= size)) {
+            return perc.find(topConnector) == perc.find(getNodeNum(row, col));
+        } else {
+            throw new IllegalArgumentException();
         }
-        return false;
     }
 
     public int numberOfOpenSites() {
