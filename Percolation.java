@@ -33,8 +33,12 @@ public class Percolation {
 
         validation(row, col);
 
+        if (isOpen(row, col)) {
+            return; //terminates open
+        }
+
         opened[row-1][col-1] = true;
-        ++numOfOpenSites;
+        numOfOpenSites++;
 
         if (row == 1) {
             perc.union(getNodeNum(row, col), topConnector);
@@ -71,11 +75,8 @@ public class Percolation {
 
     public boolean isFull(int row, int col) {
 
-        if ((row > 0 && row <= size) && (col > 0 && col <= size)) {
-            return perc.find(topConnector) == perc.find(getNodeNum(row, col));
-        } else {
-            throw new IllegalArgumentException();
-        }
+        validation(row, col);  
+        return perc.find(topConnector) == perc.find(getNodeNum(row, col));
     }
 
     public int numberOfOpenSites() {
@@ -86,11 +87,8 @@ public class Percolation {
 
     public boolean percolates() {
 
-        if (perc.find(topConnector) == perc.find(bottomConnector)) {
-            return true;
-        }
         
-        return false;
+        return perc.find(topConnector) == perc.find(bottomConnector);
 
     }
 
