@@ -9,7 +9,9 @@ public class Percolation {
     private final int bottomConnector;
     private static final int topConnector = 0;
     
-
+    //https://stackoverflow.com/questions/61396690/how-to-handle-the-backwash-problem-in-percolation-without-creating-an-extra-wuf 
+    //thread on how to remove backwash?
+    //note to self- discover how to remove backwash friday-saturday
     public Percolation(int n) {
 
         if (n <= 0) {
@@ -39,23 +41,26 @@ public class Percolation {
 
         opened[row-1][col-1] = true;
         numOfOpenSites++;
-
+        if (percolates()) {
+            return;
+        }
         if (row == 1) {
             perc.union(getNodeNum(row, col), topConnector);
         }
         if (row == size) {
             perc.union(getNodeNum(row, col), bottomConnector);
+            
         }
-        if (isOpen(row-1, col) && row>1) {
+        if (row>1 && isOpen(row-1, col) ) { //THIS ENTIRE TIME THE WHOLE REASON I WAS WRONG WAS I PUT ISOPEN FIRST INSTEAD OF CHECKING IF ROW > 1
             perc.union(getNodeNum(row, col), getNodeNum(row-1, col));
         }
-        if (isOpen(row+1, col) && row < size) {
+        if (row < size && isOpen(row+1, col)) {
             perc.union(getNodeNum(row, col), getNodeNum(row+1, col));
         }
-        if (isOpen(row, col-1) && col>1) {
+        if (col>1 && isOpen(row, col-1)) {
             perc.union(getNodeNum(row, col), getNodeNum(row, col-1));
         }
-        if (isOpen(row, col+1) && col<size) {
+        if (col<size && isOpen(row, col+1)) {
             perc.union(getNodeNum(row, col), getNodeNum(row, col+1));
         }
 
