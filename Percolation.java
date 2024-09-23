@@ -8,10 +8,12 @@ public class Percolation {
     private final int size;
     private final int bottomConnector;
     private static final int topConnector = 0;
-    
+    private final WeightedQuickUnionUF percFinalize;
+
     //https://stackoverflow.com/questions/61396690/how-to-handle-the-backwash-problem-in-percolation-without-creating-an-extra-wuf 
     //thread on how to remove backwash?
     //note to self- discover how to remove backwash friday-saturday
+    //make another perc, remove the bottom so that backwash can never overflow, perc only checks percolation but ifFUll only checks 2nd perc
     public Percolation(int n) {
 
         if (n <= 0) {
@@ -22,7 +24,8 @@ public class Percolation {
         numOfOpenSites = 0; 
         opened = new boolean[size][size]; // all false
         bottomConnector = size*size+1;
-        
+        percFinalize = new WeightedQuickUnionUF(n*n+1);
+
     }
 
     private void validation(int row, int col) {
@@ -41,11 +44,10 @@ public class Percolation {
 
         opened[row-1][col-1] = true;
         numOfOpenSites++;
-        if (percolates()) {
-            return;
-        }
+
         if (row == 1) {
             perc.union(getNodeNum(row, col), topConnector);
+            percFinalize.union(getNodeNum(row, col), topConnector);
         }
         if (row == size) {
             perc.union(getNodeNum(row, col), bottomConnector);
@@ -53,15 +55,19 @@ public class Percolation {
         }
         if (row>1 && isOpen(row-1, col) ) { //THIS ENTIRE TIME THE WHOLE REASON I WAS WRONG WAS I PUT ISOPEN FIRST INSTEAD OF CHECKING IF ROW > 1
             perc.union(getNodeNum(row, col), getNodeNum(row-1, col));
+            percFinalize.union(getNodeNum(row, col), getNodeNum(row-1, col));
         }
         if (row < size && isOpen(row+1, col)) {
             perc.union(getNodeNum(row, col), getNodeNum(row+1, col));
+            percFinalize.union(getNodeNum(row, col), getNodeNum(row+1, col));
         }
         if (col>1 && isOpen(row, col-1)) {
             perc.union(getNodeNum(row, col), getNodeNum(row, col-1));
+            percFinalize.union(getNodeNum(row, col), getNodeNum(row, col-1));
         }
         if (col<size && isOpen(row, col+1)) {
             perc.union(getNodeNum(row, col), getNodeNum(row, col+1));
+            percFinalize.union(getNodeNum(row, col), getNodeNum(row, col+1));
         }
 
     }
@@ -81,7 +87,7 @@ public class Percolation {
     public boolean isFull(int row, int col) {
 
         validation(row, col);  
-        return perc.find(topConnector) == perc.find(getNodeNum(row, col));
+        return percFinalize.find(topConnector) == percFinalize.find(getNodeNum(row, col));
     }
 
     public int numberOfOpenSites() {

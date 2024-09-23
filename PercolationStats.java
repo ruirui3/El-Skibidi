@@ -25,22 +25,19 @@ public class PercolationStats {
         for (int i = 0; i<this.trials; i++) {
 
             Percolation perc = new Percolation(n);
-            int openSites = 0;
+            
             while (!perc.percolates()) {
             
                 
                 int randomOne = StdRandom.uniformInt(1, n+1);
                 int randomTwo = StdRandom.uniformInt(1, n+1);
-    
-                if (!perc.isOpen(randomOne, randomTwo)) {
-                    perc.open(randomOne, randomTwo);
-                    openSites += 1;
-                }
-    
+                perc.open(randomOne, randomTwo); //there is a check open command in percolation.java
+                  
                 // perc.open(StdRandom.uniformInt(n) + 1, StdRandom.uniformInt(n) + 1);
     
             }
-            double progressOfSites = (double) openSites / (n * n);
+            int openedSitesTotal = perc.numberOfOpenSites();
+            double progressOfSites = (double) openedSitesTotal / (n * n);
             sumOfAverage[i] = progressOfSites;
 
         }
