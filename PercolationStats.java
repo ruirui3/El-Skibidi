@@ -1,7 +1,9 @@
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
+//final errors? allegedly objects are failed to be produced, n = 15, but test shows 0
 public class PercolationStats {
 
     //initialize int n and int trials as private;
@@ -74,7 +76,16 @@ public class PercolationStats {
 
    // test client (see below)
    public static void main(String[] args) {
-        
+        In in = new In(args[0]);      // input file
+        int n = in.readInt();         // n-by-n percolation system
+
+        // repeatedly read in sites to open and draw resulting system
+        Percolation perc = new Percolation(n);
+        while (!in.isEmpty()) {
+            int i = in.readInt();
+            int j = in.readInt();
+            perc.open(i, j);
+        }
    }
 
 }
